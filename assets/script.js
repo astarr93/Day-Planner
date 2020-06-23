@@ -35,10 +35,10 @@ function displayDate() {
   $("#currentDay").text(Today);
 }
 
-// Add unique class hour-i and write in the hour for each timeblock hour div;
+// Add unique class hour-a and write in the hour for each timeblock hour div;
 function addHours() {
   $(".hour").each(function (i) {
-    $(this).addClass("hour-" + i);
+    $(this).attr("id", "hour-" + i);
   });
   let a = 0;
   for (i = 0; i < workingHours.length; i++) {
@@ -47,19 +47,20 @@ function addHours() {
   }
 }
 
+// Add unique class activity-a for each text area. A's value should match the same value of the hour class in the sibling div from addHours()
 function loadActivity() {
   let a = 0;
   for (i = 0; i < workingHours.length; i++) {
-    $(".hour-" + a)
+    $("#hour-" + a)
       .siblings("textarea")
-      .text("success");
+      .attr("id", "activity-" + a);
     a++;
   }
 }
 
-// $(".saveBtn").on("click", function () {
-//   // let activity = $(this).siblings(".description").val();
-//   // let hour = $(this).parent().attr("id");
-//   // localStorage.setItem(hour, activity);
-//   console.log(1);
-// });
+$(".saveBtn").on("click", function () {
+  // let activity = $(this).siblings(".description").val();
+  // let hour = $(this).siblings().attr("class");
+  // localStorage.setItem(hour, activity);
+  console.log("success");
+});
