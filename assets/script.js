@@ -17,7 +17,7 @@ const workingHours = [
 $(document).ready(function () {
   $.each(workingHours, function (index, value) {
     container.append($('<div class="row time-block">'));
-    console.log(index);
+    // console.log(index);
   });
   $(".time-block").append($('<div class="col-md-1 col-sm-2 hour">'));
   $(".time-block").append(
@@ -25,13 +25,23 @@ $(document).ready(function () {
   );
   $(".time-block").append($('<button class="saveBtn col-md-1 col-sm-2">'));
   $(".saveBtn").append($('<i class="far fa-save">'));
-  // addHours();
+  displayDate();
+  addHours();
 });
 
-//   const $currentDay = $("#currentDay");
-//   const $container = $(".container");
-//   let nowDay = moment().format("dddd, MMMM Do");
-//   $currentDay.text(nowDay);
+function addHours() {
+  for (i = 0; i < workingHours.length; i++) {
+    $(".hour").text(workingHours[i]);
+  }
+}
+
+function displayDate() {
+  const $currentDay = $("#currentDay");
+  const $container = $(".container");
+  let nowDay = moment().format("dddd, MMMM Do");
+  $currentDay.text(nowDay);
+}
+
 //   $(".saveBtn").on("click", function () {
 //     var activity = $(this).siblings(".description").val();
 //     var hour = $(this).parent().attr("id");
