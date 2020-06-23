@@ -26,6 +26,7 @@ $(document).ready(function () {
   $(".saveBtn").append($('<i class="far fa-save">'));
   displayDate();
   addHours();
+  loadActivity();
 });
 
 // Displays current date on index header
@@ -46,9 +47,19 @@ function addHours() {
   }
 }
 
+function loadActivity() {
+  let a = 0;
+  for (i = 0; i < workingHours.length; i++) {
+    $(".hour-" + a)
+      .siblings("textarea")
+      .text("success");
+    a++;
+  }
+}
+
 // $(".saveBtn").on("click", function () {
-//   let activity = $(this).siblings(".description").val();
-//   let hour = $(this).parent().attr("id");
-//   localStorage.setItem(hour, activity);
-//   console.log(localStorage);
+//   // let activity = $(this).siblings(".description").val();
+//   // let hour = $(this).parent().attr("id");
+//   // localStorage.setItem(hour, activity);
+//   console.log(1);
 // });
