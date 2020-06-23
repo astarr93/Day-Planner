@@ -15,9 +15,8 @@ const workingHours = [
 
 //When the DOM is ready, JS builds each time-block using the woork
 $(document).ready(function () {
-  $.each(workingHours, function (index, value) {
+  $.each(workingHours, function () {
     container.append($('<div class="row time-block">'));
-    // console.log(index);
   });
   $(".time-block").append($('<div class="col-md-1 col-sm-2 hour">'));
   $(".time-block").append(
@@ -29,22 +28,27 @@ $(document).ready(function () {
   addHours();
 });
 
+// Displays current date on index header
+function displayDate() {
+  let Today = moment().format("dddd, MMMM Do");
+  $("#currentDay").text(Today);
+}
+
+// Add unique class hour-i and write in the hour for each timeblock hour div;
 function addHours() {
+  $(".hour").each(function (i) {
+    $(this).addClass("hour-" + i);
+  });
+  let a = 0;
   for (i = 0; i < workingHours.length; i++) {
-    $(".hour").text(workingHours[i]);
+    $(".hour-" + a).text(workingHours[a]);
+    a += 1;
   }
 }
 
-function displayDate() {
-  const $currentDay = $("#currentDay");
-  const $container = $(".container");
-  let nowDay = moment().format("dddd, MMMM Do");
-  $currentDay.text(nowDay);
-}
-
-//   $(".saveBtn").on("click", function () {
-//     var activity = $(this).siblings(".description").val();
-//     var hour = $(this).parent().attr("id");
-//     localStorage.setItem(hour, activity);
-//     console.log(localStorage);
-//   });
+// $(".saveBtn").on("click", function () {
+//   let activity = $(this).siblings(".description").val();
+//   let hour = $(this).parent().attr("id");
+//   localStorage.setItem(hour, activity);
+//   console.log(localStorage);
+// });
