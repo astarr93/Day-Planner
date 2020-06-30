@@ -12,8 +12,6 @@ const workingHours = [  // Add additional hours to dynamically create all time-b
   "3pm",
   "4pm",
   "5pm",
-  "10pm",
-  "11pm",
 ];
 
 // WHEN DOM IS LOADED, THESE FUNCTIONS ARE CALLED TO BUILD THE DAY SCHEDULER
