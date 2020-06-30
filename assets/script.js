@@ -1,7 +1,6 @@
 //Global Variables
 const container = $(".container");
 let currentHour = moment().hour();
-let bookedEvents = [];
 const workingHours = [  // Add additional hours to dynamically create all time-block components
   "8am",
   "9am",
@@ -19,9 +18,8 @@ const workingHours = [  // Add additional hours to dynamically create all time-b
 $(document).ready(function () {
   displayToday();
   buildScheduler();
-  loadScheduledEvents();
   addSaveClickEvent();
-  // compareHour();
+  compareHour();
 });
 
 // FUNCTIONS:
@@ -42,47 +40,41 @@ function buildScheduler() {
   $(".time-block").append($('<textarea class="description col-md-10 col-sm-8">'));
   $(".time-block").append($('<button class="saveBtn col-md-1 col-sm-2">'));
   $(".saveBtn").append($('<i class="far fa-save">'));
-  addTimesAndIds();
+  writeTimesIdsPreviousAppointments();
 }
 
-// Writes in defined workingHours into Scheduler and adds unique Ids
-function addTimesAndIds() {
+// Writes in defined workingHours into Scheduler and adds unique Ids. It also checks if previous appointments have been made and loads them if available
+function writeTimesIdsPreviousAppointments() {
   $(".hour").each(function (i) {
     $(this).attr("id", workingHours[i]).html(workingHours[i]);
     $(this).siblings("textarea").attr("id", workingHours[i]);
-  });
-}
-
-// Load any previously scheduled events
-function loadScheduledEvents() {
-  let bookedEvents = {}
-  keys = Object.keys(localStorage)
-  i = keys.length;
-
-}
+    if (localStorage[workingHours[i]]) {
+      $(this).siblings("textarea").val(localStorage[workingHours[i]]);
+    }
+  })
+};
 
 // Add click event handler for the hour block's save handler. Save's textarea contents to local storage
 function addSaveClickEvent() {
   $(".saveBtn").on("click", function () {
+    console.log("Success!")
     let eventTime = $(this).siblings(".hour").html();
     let eventText = $(this).siblings(".description").val();
-    let appointment = [eventTime, eventText];
-    bookedEvents += appointment;
+    localStorage.setItem(eventTime, eventText);
   });
 }
 
 // Compare the current time against all timeslots and apply/remove specific classes based on past, present, and future
-// function compareHour() {
-//   let blockHour = parseInt($(this).attr("id").split("-")[1]);
-//   console.log(blockHour);
-//   console.log(currentHour);
-//   if (currentHour > blockHour) {
-//     $(this).siblings(".description").addClass("past");
-//   } else if (currentHour === blockHour) {
-//     $(this).siblings.removeClass("past");
-//     $(this).siblings.addClass("present");
-//   } else {
-//     $(this).siblings.removeClass("past present");
-//     $(this).siblings.addClass("future");
-//   }
-// }
+function compareHour() {
+  $(".hour").each(function (i){
+    const now = moment().format("HH:mm")
+    const scheduleTime = moment(this.id, ["ha"]).format("HH:mm");
+    if (moment(currentHour, ["H"]).format("ha") === this.id) {
+      $(this).siblings(".description").addClass("present");
+    } else if (now < scheduleTime) {
+      $(this).siblings(".description").addClass("future");
+    } else if (now > scheduleTime) {
+      $(this).siblings(".description").addClass("past");
+    }
+  })
+}
