@@ -1,6 +1,6 @@
 //Global Variables
 const container = $(".container");
-let currentHour = moment().hour();
+const currentHour = moment().format("HH:mm");
 const workingHours = [  // Add additional hours to dynamically create all time-block components
   "8am",
   "9am",
@@ -12,14 +12,16 @@ const workingHours = [  // Add additional hours to dynamically create all time-b
   "3pm",
   "4pm",
   "5pm",
+  "10pm",
+  "11pm",
 ];
 
 // WHEN DOM IS LOADED, THESE FUNCTIONS ARE CALLED TO BUILD THE DAY SCHEDULER
 $(document).ready(function () {
   displayToday();
   buildScheduler();
-  addSaveClickEvent();
   compareHour();
+  addSaveClickEvent();
 });
 
 // FUNCTIONS:
@@ -54,6 +56,20 @@ function writeTimesIdsPreviousAppointments() {
   })
 };
 
+// Compare the current time against all timeslots and apply/remove specific classes based on past, present, and future
+function compareHour() {
+  $(".hour").each(function () {
+    let scheduleTime = moment(this.id, ["ha"]).format("HH:mm");
+    if (moment(currentHour, ["H"]).format("ha") === this.id) {
+      $(this).siblings(".description").addClass("present");
+    } else if (currentHour < scheduleTime) {
+      $(this).siblings(".description").addClass("future");
+    } else if (currentHour > scheduleTime) {
+      $(this).siblings(".description").addClass("past");
+    }
+  })
+}
+
 // Add click event handler for the hour block's save handler. Save's textarea contents to local storage
 function addSaveClickEvent() {
   $(".saveBtn").on("click", function () {
@@ -62,19 +78,4 @@ function addSaveClickEvent() {
     let eventText = $(this).siblings(".description").val();
     localStorage.setItem(eventTime, eventText);
   });
-}
-
-// Compare the current time against all timeslots and apply/remove specific classes based on past, present, and future
-function compareHour() {
-  $(".hour").each(function (i){
-    const now = moment().format("HH:mm")
-    const scheduleTime = moment(this.id, ["ha"]).format("HH:mm");
-    if (moment(currentHour, ["H"]).format("ha") === this.id) {
-      $(this).siblings(".description").addClass("present");
-    } else if (now < scheduleTime) {
-      $(this).siblings(".description").addClass("future");
-    } else if (now > scheduleTime) {
-      $(this).siblings(".description").addClass("past");
-    }
-  })
 }
